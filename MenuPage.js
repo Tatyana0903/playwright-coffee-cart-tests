@@ -4,9 +4,9 @@ export class MenuPage {
   constructor(page) {
     this.page = page;
     this.cappucinoCup = page.getByTestId('Cappuccino');
-    this.listItem = this.page.getByRole('listitem').filter({ has: cappucionCup });
+    this.listItem = this.page.getByRole('listitem').filter({ has: this.cappucinoCup });
     this.espressoCup = this.page.getByTestId('Espresso');
-    this.espressoListItem = this.page.getByRole('listitem').filter({ has: espressoCup });
+    this.espressoListItem = this.page.getByRole('listitem').filter({ has: this.espressoCup });
     this.americanoCup = this.page.getByTestId('Americano');
     this.messageCoffee = this.page.getByText("It's your lucky day! Get an extra cup of Mocha for $4.");
     this.positiveMessage = this.page.getByRole('button', { name: 'Yes, of course!' });
@@ -14,34 +14,44 @@ export class MenuPage {
   }
 
   async open() {
-    await this.page.goto('https://coffee-cart.app/');
+    // Check if already on the site to preserve cart state
+    const currentUrl = this.page.url();
+    if (currentUrl.includes('coffee-cart.app')) {
+      // Navigate via menu link to preserve state
+      const menuLink = this.page.locator('a[href="/"]');
+      await menuLink.click();
+      await this.page.waitForURL('**/');
+    } else {
+      // First time navigation
+      await this.page.goto('https://coffee-cart.app/');
+    }
   }
 
   async cappucinoClick() {
-    this.cappucinoCup.click();
+    await this.cappucinoCup.click();
   }
 
   async clickPage() {
-    this.cartPage.click();
+    await this.cartPage.click();
   }
 
   async espressoClick() {
-    this.espressoCup.click();
+    await this.espressoCup.click();
   }
 
   async americanoClick() {
-    this.americanoCup.click();
+    await this.americanoCup.click();
   }
 
   async messageButton() {
-    this.messageCoffee.click();
+    await this.messageCoffee.click();
   }
 
   async messageYes() {
-    this.positiveMessage.click();
+    await this.positiveMessage.click();
   }
 
   async messageNo() {
-    this.negativeMessage.click();
+    await this.negativeMessage.click();
   }
 }

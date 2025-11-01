@@ -9,7 +9,21 @@
   "devDependencies": {
     "@playwright/test": "^1"
   },
-  "scripts": {},
+ "scripts": {
+    "install:deps": "npm install && npx playwright install --with-deps",
+    "test": "npx playwright test",
+    "test:smoke": "npx playwright test smoke",
+    "test:menu": "npx playwright test menu",
+    "test:cart": "npx playwright test cart",
+    "test:checkout": "npx playwright test checkout",
+    "test:e2e": "npx playwright test e2e",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "test:debug": "npx playwright test --debug",
+    "test:report": "npx playwright show-report",
+    "lint": "eslint . --ext .js",
+    "ci": "npm run install:deps && npm run test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
