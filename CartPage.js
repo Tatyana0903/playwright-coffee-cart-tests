@@ -9,9 +9,9 @@ export class CartPage {
       hasText: 'Cappuccino'
     });
 
-    this.cappucinoName = this.cappuccinoItem.locator('div').nth(0);
-    this.cappucinoUnit = this.cappuccinoItem.locator('div').nth(1);
-    this.cappucinoTotal = this.cappuccinoItem.locator('div').nth(3);
+    this.cappucinoName = this.cappucinoItems.locator('div').nth(0);
+    this.cappucinoUnit = this.cappucinoItems.locator('div').nth(1);
+    this.cappucinoTotal = this.cappucinoItems.locator('div').nth(3);
 
     this.espressoItem = page.getByRole('listitem').filter({
       hasText: 'Espresso'
@@ -20,11 +20,11 @@ export class CartPage {
     this.espressoLocator = this.espressoItem.locator('div').nth(1);
     this.espressoTotal = this.espressoItem.locator('div').nth(3);
 
-    this.discountedMochaItem = this.cartListLocator.getByRole('listitem')
+    this.discountedMochaItem = page.getByRole('listitem')
       .filter({ hasText: '(Discounted) Mocha' });
-    this.mochaTotal = this.mochaDiscountedItem.locator('div').nth(3);
+    this.mochaTotal = this.discountedMochaItem.locator('div').nth(3);
 
-    this.americanoItem = this.cartLocator.getByRole('listitem')
+    this.americanoItem = page.getByRole('listitem')
       .filter({ hasText: 'Americano' });
     this.americanoTotalCost = this.americanoItem.locator('div').nth(3);
 
@@ -35,7 +35,11 @@ export class CartPage {
     this.cappucinoOneButton = page.getByRole('button', { name: 'Add one Cappuccino' });
   }
   async open() {
-    await this.page.goto('https://coffee-cart.app/cart');
+    // Click the cart link in navigation instead of direct navigation
+    // to preserve cart state
+    const cartLink = this.page.locator('a[href="/cart"]');
+    await cartLink.click();
+    await this.page.waitForURL('**/cart');
   }
 
   async waitForLoading() {
@@ -51,11 +55,11 @@ export class CartPage {
   }
 
   async clickRemoveAllCappucinoButton() {
-    await this.clickRemoveAllCappucinoButton();
+    await this.removeAllCappucinoButton.click();
   }
 
   async clickRemoveOneEspresso() {
-    await this.clickRemoveOneEspresso.click();
+    await this.removeOneEspressoButton.click();
   }
 
   async clickOneCappucinoButton() {
